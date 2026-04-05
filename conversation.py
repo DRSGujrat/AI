@@ -37,4 +37,8 @@ for i in range(5):
 
     # Optional: keep system + last 2 turns (4 messages) to avoid slowing down
     teacher_conversation = [teacher_system] + teacher_conversation[-4:]
+<<<<<<< HEAD
     student_conversation = [student_system] + student_conversation[-4:]
+=======
+    student_conversation = [student_system] + student_conversation[-4:]
+>>>>>>> 98e7815 (implemented rag pipeline and House planner AI AGENT in langgraph)
