@@ -18,6 +18,7 @@ builder.add_conditional_edges("Planner", planner_route,{
     "Flights" : "Flight"
 
 })
+builder.add_edge("ask_user", "Flight")   
 
 builder.add_edge('Flight',"Hotel")
 builder.add_edge("Hotel","Itinerary")
