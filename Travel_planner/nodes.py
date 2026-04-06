@@ -141,62 +141,56 @@ def ask_user_node(state: TravelState):
     return updates
 
 def flight_node(state: TravelState):
-    prompt = f"""
-    Generate 3 realistic flight options:
+    # Simple deterministic pricing logic
+    base_price = 4000
 
-    Destination: {state.destination}
-    Date: {state.start_date}
-    Budget: {state.budget}
+    if state.budget:
+        if state.budget > 100000:
+            base_price = 8000
+        elif state.budget > 50000:
+            base_price = 6000
 
-    Rules:
-    - Use real airline names (IndiGo, Air India, Vistara)
-    - Prices should be realistic (₹3000–₹15000)
-    - Return ONLY JSON
+    flights = {
+        "IndiGo": base_price,
+        "Air India": base_price + 1500,
+        "Vistara": base_price + 2500
+    }
 
-    Format:
-    {{
-      "IndiGo": 5000,
-      "Air India": 6500,
-      "Vistara": 7000
-    }}
-    """
-
-    response = client.models.generate_content(
-        model="gemini-2.5-flash",
-        contents=prompt
-    )
-
-    data = parse_json(response.text)
-
-    return {"flight": data}
+    return {"flight": flights}
 
 def hotel_node(state: TravelState):
-    prompt = f"""
-    Generate 3 hotel options in {state.destination}
+    # Simple tiering based on budget
+    if state.budget is None:
+        budget_tier = "mid"
+    elif state.budget < 20000:
+        budget_tier = "low"
+    elif state.budget < 80000:
+        budget_tier = "mid"
+    else:
+        budget_tier = "high"
 
-    Budget: {state.budget}
+    if budget_tier == "low":
+        hotels = {
+            "OYO Rooms": 1200,
+            "Zostel": 1500,
+            "Budget Inn": 1800
+        }
 
-    Rules:
-    - Mix budget + mid-range hotels
-    - Prices per night
-    - Return ONLY JSON
+    elif budget_tier == "mid":
+        hotels = {
+            "Treebo": 3000,
+            "FabHotel": 3500,
+            "Lemon Tree": 4500
+        }
 
-    Format:
-    {{
-      "OYO": 2000,
-      "Treebo": 3500,
-      "Taj Hotel": 8000
-    }}
-    """
+    else:
+        hotels = {
+            "Taj Hotel": 9000,
+            "ITC Hotels": 11000,
+            "Marriott": 13000
+        }
 
-    response = client.models.generate_content(
-        model="gemini-2.5-flash",
-        contents=prompt
-    )
-
-    data = parse_json(response.text)
-
-    return {"hotels": data}
+    return {"hotels": hotels}
 
 def itinerary_node(state: TravelState):
     # Pass all relevant details from the state into the prompt
