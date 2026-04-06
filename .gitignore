@@ -1,23 +1,48 @@
-# Python
+# ── Python ───────────────────────────────────────
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
- 
-# Virtual env
+*.pyw
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# ── Virtual Environments ─────────────────────────
+venv/
+.venv/
+env/
 aiven/
 rag_venv/
-venv/
-.env/
+
+# ── Environment Variables ─────────────────────────
 .env
- 
-# VS Code
+.env.local
+.env.*.local
+
+# ── Jupyter Notebooks ─────────────────────────────
+.ipynb_checkpoints/
+
+# ── Frontend (Node / Vite) ────────────────────────
+Frontend/node_modules
+Frontend/dist
+Frontend/.next
+Frontend/out
+Frontend/.cache
+
+# ── IDE & Editor ─────────────────────────────────
 .vscode/
- 
-# OS junk
+.idea/
+*.swp
+*.swo
+
+# ── OS Junk ──────────────────────────────────────
 .DS_Store
- 
-# Logs
+Thumbs.db
+desktop.ini
+
+# ── Logs ─────────────────────────────────────────
 *.log
-conversation.py
- 
+logs/

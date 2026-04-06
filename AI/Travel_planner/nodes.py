@@ -4,8 +4,13 @@ import json
 from datetime import datetime
 from google import genai
 from datetime import datetime
+import dotenv
+import os
 
-client = genai.Client(api_key="AIzaSyBVGbAitWnI_mumhm0lBf090MuJ9jc4TQg")
+dotenv.load_dotenv()
+
+
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 def planner_node(state: TravelState):
     text = state.query
@@ -103,28 +108,7 @@ def ask_user_node(state: TravelState):
     if state.budget is None:
         missing_info.append("budget")
 
-    print("Please enter:", missing_info)
-
-    updates = {}
-
-    for field in missing_info:
-        if field == "destination":
-            updates["destination"] = input("Destination: ")
-
-        elif field == "start_date":
-            updates["start_date"] = datetime.strptime(
-                input("Start date (YYYY-MM-DD): "), "%Y-%m-%d"
-            ).date()
-
-        elif field == "end_date":
-            updates["end_date"] = datetime.strptime(
-                input("End date (YYYY-MM-DD): "), "%Y-%m-%d"
-            ).date()
-
-        elif field == "budget":
-            updates["budget"] = int(input("Budget: "))
-
-    return updates
+    return {"missing_fields": missing_info}
 
 def flight_node(state: TravelState):
     # Simple deterministic pricing logic

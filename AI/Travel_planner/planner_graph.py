@@ -18,7 +18,7 @@ builder.add_conditional_edges("Planner", planner_route,{
     "Flights" : "Flight"
 
 })
-builder.add_edge("ask_user", "Flight")   
+builder.add_edge("ask_user", END)
 
 builder.add_edge('Flight',"Hotel")
 builder.add_edge("Hotel","Itinerary")
@@ -28,11 +28,4 @@ builder.add_edge("Itinerary",END)
 
 graph = builder.compile()
 
- 
-query = str(input("Enter the Query : "))
-
-result = graph.invoke({
-    "query": query
-})
-
-print(result)
+# Graph is now exported for the FastAPI router to invoke.

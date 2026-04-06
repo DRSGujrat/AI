@@ -13,7 +13,8 @@ class TravelState(BaseModel):
 
     flight: Optional[Dict[str, int]] = None
     hotels: Optional[Dict[str, int]] = None
-    itinerary: Optional[str] = None
+    itinerary: Optional[list] = None
+    missing_fields: Optional[List[str]] = None
 
 class PlannerOutput(BaseModel):
     destination: Optional[str] = None

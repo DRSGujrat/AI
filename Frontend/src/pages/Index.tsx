@@ -6,30 +6,10 @@ import ChatInput from "@/components/ChatInput";
 import TypingIndicator from "@/components/TypingIndicator";
 import SuggestionChips from "@/components/SuggestionChips";
 
-// Simulated agent response — replace with real LangGraph SSE endpoint
-const simulateAgentResponse = (userMessage: string): Promise<Message[]> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve([
-        {
-          id: crypto.randomUUID(),
-          role: "assistant",
-          content: "",
-          agentStep: "SEARCH_NODE → Analyzing preferences",
-          tripData: undefined,
-        },
-      ]);
-    }, 800);
-
-    setTimeout(() => {
-      // This would come from your LangGraph state
-    }, 1500);
-  });
-};
-
 const Index = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [cumulativeQuery, setCumulativeQuery] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = useCallback(() => {
@@ -47,33 +27,84 @@ const Index = () => {
     setMessages((prev) => [...prev, userMsg]);
     setIsLoading(true);
 
-    // Simulate agent steps — replace with real SSE from LangGraph
-    await new Promise((r) => setTimeout(r, 1000));
+    const newQuery = cumulativeQuery ? `${cumulativeQuery}. ${text}` : text;
+    setCumulativeQuery(newQuery);
 
     const stepMsg: Message = {
       id: crypto.randomUUID(),
       role: "assistant",
-      content: "Let me plan that trip for you! Searching for the best options...",
-      agentStep: "SEARCH_NODE",
+      content: "Analyzing your request and talking to the Gemini Travel Planner...",
+      agentStep: "COMMUNICATING WITH BACKEND",
     };
+
+    // We append the typing indicator message that will stay in the log
     setMessages((prev) => [...prev, stepMsg]);
 
-    await new Promise((r) => setTimeout(r, 2000));
+    try {
+      const response = await fetch("http://localhost:8000/api/travel/plan", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ query: newQuery }),
+      });
 
-    const resultMsg: Message = {
-      id: crypto.randomUUID(),
-      role: "assistant",
-      content: "Here's what I found — a great itinerary based on your preferences:",
-      tripData: {
-        title: "Goa Beach Getaway",
-        destination: "Delhi → Goa",
-        dates: "Dec 20 – Dec 25, 2025",
-        budget: "₹22,500 estimated",
-        highlights: ["Beach Hopping", "Night Markets", "Water Sports", "Old Goa Heritage"],
-        status: "complete",
-      },
-    };
-    setMessages((prev) => [...prev, resultMsg]);
+      const data = await response.json();
+
+      if (data.status === "missing_info") {
+        const fields = data.missing_fields.join(", ");
+        const missingMsg: Message = {
+          id: crypto.randomUUID(),
+          role: "assistant",
+          content: `I'm still missing some necessary details to plan your trip. Could you please provide: **${fields}**?`,
+          agentStep: "ASK_USER WAITING",
+        };
+        setMessages((prev) => [...prev, missingMsg]);
+      } else if (data.status === "success") {
+        const startDate = data.itinerary?.[0]?.date || "Date Unspecified";
+        const totalDays = data.itinerary?.length || 0;
+        const endDate = data.itinerary?.[totalDays - 1]?.date || "";
+        const dateString = endDate && startDate !== endDate ? `${startDate} to ${endDate}` : startDate;
+
+        let minFlight = "N/A";
+        if (data.flight_cost) {
+          minFlight = Math.min(...Object.values(data.flight_cost as Record<string, number>)).toString();
+        }
+
+        let minHotel = "N/A";
+        if (data.hotel_cost) {
+          minHotel = Math.min(...Object.values(data.hotel_cost as Record<string, number>)).toString();
+        }
+
+        const highlights = data.itinerary?.map((day: any) => `Day ${day.day_number}: ${day.theme}`) || [];
+
+        const resultMsg: Message = {
+          id: crypto.randomUUID(),
+          role: "assistant",
+          content: "Here's what I found! AI has finalized a great itinerary based on your preferences:",
+          tripData: {
+            title: "Your Custom Setup",
+            destination: "AI Generated Itinerary",
+            dates: dateString,
+            budget: `Est. Min Flights: ₹${minFlight} | Est. Min Hotel: ₹${minHotel}/night`,
+            highlights: highlights,
+            status: "complete",
+          },
+        };
+
+        setMessages((prev) => [...prev, resultMsg]);
+        setCumulativeQuery(""); // Reset chain for the next completely new request
+      }
+    } catch (e) {
+      console.error(e);
+      const errorMsg: Message = {
+        id: crypto.randomUUID(),
+        role: "assistant",
+        content: "Sorry, I could not connect to the backend API (`http://localhost:8000`). Please ensure it is running.",
+      };
+      setMessages((prev) => [...prev, errorMsg]);
+    }
+
     setIsLoading(false);
   };
 
@@ -132,7 +163,7 @@ const Index = () => {
         <div className="sticky bottom-0 py-4 bg-gradient-to-t from-[#050506] via-[#050506]/95 to-transparent">
           <ChatInput onSend={handleSend} disabled={isLoading} />
           <p className="text-center text-xs text-foreground-muted/40 mt-2">
-            Powered by LangGraph Agent · Trip data is simulated
+            Powered by LangGraph Agent
           </p>
         </div>
       </main>

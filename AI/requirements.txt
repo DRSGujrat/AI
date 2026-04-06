@@ -1,0 +1,19 @@
+# ── FastAPI Backend ──────────────────────────────
+fastapi>=0.111.0
+uvicorn[standard]>=0.29.0
+pydantic>=2.0.0
+
+# ── LangGraph Travel Planner ─────────────────────
+langgraph>=0.2.0
+google-genai>=0.3.0
+
+# ── RAG Pipeline ─────────────────────────────────
+pypdf>=4.0.0
+sentence-transformers>=3.0.0
+faiss-cpu>=1.8.0
+numpy>=1.26.0
+python-dotenv>=1.0.0
+os>=1.0.0
+
+# ── Multi-Agent Conversation ─────────────────────
+requests>=2.32.0
