@@ -1,18 +1,11 @@
 from langgraph_states.travel_state import TravelState,PlannerOutput,DayPlan,ItineraryOutput,Activity
-from datetime import date
-
-from google import genai
-
-client = genai.Client(api_key="AIzaSyBVGbAitWnI_mumhm0lBf090MuJ9jc4TQg")
 import re
 import json
 from datetime import datetime
+from google import genai
+from datetime import datetime
 
-
-import re
-from datetime import date
-
-
+client = genai.Client(api_key="AIzaSyBVGbAitWnI_mumhm0lBf090MuJ9jc4TQg")
 
 def planner_node(state: TravelState):
     text = state.query
@@ -69,10 +62,6 @@ REQUIRED JSON SCHEMA:
         print(f"Parsing Error: {e}")
         return {"error": "Failed to parse LLM output"}
 
-    
-
-import json
-
 def parse_json(text: str):
     try:
         # remove markdown formatting
@@ -101,9 +90,6 @@ def planner_route(state : TravelState):
         return "ask_user_node"
     else:
         return "Flights"
-
-
-from datetime import datetime
 
 def ask_user_node(state: TravelState):
     missing_info = []

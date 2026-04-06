@@ -2,9 +2,6 @@ from pydantic import BaseModel
 from typing import Optional,Dict,List
 from datetime import date
 
-
-
-
 class TravelState(BaseModel):
     query: str
 
@@ -18,21 +15,12 @@ class TravelState(BaseModel):
     hotels: Optional[Dict[str, int]] = None
     itinerary: Optional[str] = None
 
-
-
-
-
 class PlannerOutput(BaseModel):
     destination: Optional[str] = None
     start_date: Optional[date] = None
     end_date: Optional[date] = None
     budget: Optional[int] = None
     preferences: Optional[List[str]] = None
-
-
-
-from typing import List
-from pydantic import BaseModel
 
 class Activity(BaseModel):
     time: str
