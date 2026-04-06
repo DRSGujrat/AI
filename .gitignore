@@ -3,20 +3,21 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
-
+ 
 # Virtual env
-ai_venv/
+aiven/
 rag_venv/
 venv/
 .env/
 .env
-
+ 
 # VS Code
 .vscode/
-
+ 
 # OS junk
 .DS_Store
-
+ 
 # Logs
 *.log
 conversation.py
+ 

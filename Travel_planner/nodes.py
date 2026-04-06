@@ -3,7 +3,7 @@ from datetime import date
 
 from google import genai
 
-client = genai.Client(api_key="YOUR_API_KEY_HERE")
+client = genai.Client(api_key="AIzaSyBVGbAitWnI_mumhm0lBf090MuJ9jc4TQg")
 import re
 import json
 from datetime import datetime
