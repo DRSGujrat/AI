@@ -10,7 +10,7 @@ import os
 dotenv.load_dotenv()
 
 
-client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
 
 def planner_node(state: TravelState):
     text = state.query

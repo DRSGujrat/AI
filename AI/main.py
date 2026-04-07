@@ -1,5 +1,7 @@
 import sys
 import os
+from dotenv import load_dotenv
+load_dotenv()
 
 # Ensure the subdirectories are in the python path to avoid import errors 
 # since planner_graph uses absolute imports assuming Travel_planner is the root.
