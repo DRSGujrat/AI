@@ -43,42 +43,46 @@ User types a message
 ---
 
 ## Project Structure
-
 ```
-tripai/
+frontend/
+├── src/
+│   ├── app/                      # App-level setup
+│   │   ├── App.tsx
+│   │   └── main.tsx
+│   │
+│   ├── pages/                   # Route-level components
+│   │   ├── Home.tsx             # (rename Index → Home)
+│   │   └── NotFound.tsx
+│   │
+│   ├── components/              # Shared components ONLY
+│   │   ├── ui/                  # Reusable UI (buttons, cards)
+│   │   ├── layout/              # Navbar, wrappers
+│   │   └── common/              # Generic reusable stuff
+│   │
+│   ├── features/                
+│   │   └── chat/
+│   │       ├── ChatMessage.tsx
+│   │       ├── TypingIndicator.tsx
+│   │       ├── SuggestionChips.tsx
+│   │       ├── ItineraryCard.tsx
+│   │       └── TripCard.tsx
+│   │
+│   ├── hooks/
+│   │   ├── useMobile.ts
+│   │   └── useToast.ts
+│   │
+│   ├── lib/                     # utils, helpers
+│   │
+│   ├── styles/
+│   │   ├── App.css
+│   │   └── index.css
+│   │
+│   └── types/                   # (optional but useful)
 │
-├── frontend/                       # React application
-│   └── src/
-│       ├── tokens.js               # Design tokens (T), NODES config, global CSS
-│       ├── constants.js            # SUGGESTIONS list, EMPTY_TRIP_STATE shape
-│       ├── mockStream.js           # Simulated LangGraph SSE (dev/demo only)
-│       ├── api.js                  # Real SSE fetch → backend /chat/stream
-│       │
-│       ├── hooks/
-│       │   └── useAgentStream.js   # All streaming + state logic in one hook
-│       │
-│       ├── components/
-│       │   ├── TopBar.jsx          # Navbar: logo, running indicator, toggle
-│       │   ├── ChatBubble.jsx      # ChatBubble + ThinkingBubble + RichText
-│       │   ├── EmptyState.jsx      # Welcome screen with suggestion chips
-│       │   ├── InputBar.jsx        # Textarea, send button, keyboard handling
-│       │   └── StatePanel.jsx      # StepPills + 5 state sections (flights, etc.)
-│       │
-│       └── TripAgentChat.jsx       # Root — composes everything (~70 lines)
-│
-└── backend/                        # Python + LangGraph + FastAPI
-    ├── main.py                     # FastAPI app + /chat/stream SSE endpoint
-    ├── graph.py                    # LangGraph StateGraph definition
-    ├── state.py                    # TripState TypedDict
-    └── nodes/
-        ├── parse_intent.py         # LLM: extract structured trip details from NL
-        ├── validate_input.py       # Check required fields are present
-        ├── search_flights.py       # Flight search (API or mock)
-        ├── search_hotels.py        # Hotel search (API or mock)
-        ├── build_itinerary.py      # Day-by-day plan generation
-        ├── calculate_budget.py     # Cost aggregation
-        └── llm_response.py        # Final streaming LLM answer
-```
+├── public/
+├── index.html
+├── vite.config.ts
+└── bun.lock
 
 ---
 
