@@ -83,11 +83,11 @@ frontend/
 ├── index.html
 ├── vite.config.ts
 └── bun.lock
-
+```
 ---
 
 ## Tech Stack
-
+```
 | Layer     | Technology                                      |
 |-----------|-------------------------------------------------|
 | Frontend  | React 18, plain CSS-in-JS (no Tailwind needed)  |
@@ -96,7 +96,7 @@ frontend/
 | LLM       | OpenAI GPT-4o (or any LangChain-compatible LLM) |
 | Streaming | Server-Sent Events (SSE) via FastAPI            |
 | State     | LangGraph `StateGraph` with `TypedDict`         |
-
+```
 ---
 
 ## LangGraph State — The Core Concept
