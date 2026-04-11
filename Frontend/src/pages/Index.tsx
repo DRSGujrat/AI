@@ -90,6 +90,8 @@ const Index = () => {
             highlights: highlights,
             status: "complete",
           },
+          itinerary: data.itinerary,
+          totalCost: data.total_estimated_cost,
         };
 
         setMessages((prev) => [...prev, resultMsg]);

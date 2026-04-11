@@ -1,5 +1,19 @@
 import { Bot, User } from "lucide-react";
 import TripCard from "./TripCard";
+import ItineraryCard from "./ItineraryCard";
+
+export interface Activity {
+  time: string;
+  description: string;
+  location: string;
+}
+
+export interface DayPlan {
+  day_number: number;
+  date: string;
+  theme: string;
+  activities: Activity[];
+}
 
 export interface Message {
   id: string;
@@ -13,6 +27,8 @@ export interface Message {
     highlights: string[];
     status?: "searching" | "planning" | "complete";
   };
+  itinerary?: DayPlan[];
+  totalCost?: number;
   agentStep?: string;
 }
 
@@ -68,6 +84,11 @@ const ChatMessage = ({ message }: ChatMessageProps) => {
         {/* Trip card */}
         {message.tripData && (
           <TripCard {...message.tripData} />
+        )}
+
+        {/* Itinerary card */}
+        {message.itinerary && (
+          <ItineraryCard itinerary={message.itinerary} totalCost={message.totalCost} />
         )}
       </div>
     </div>
