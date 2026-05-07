@@ -293,24 +293,30 @@ Then in `useAgentStream.js`, swap from `mockStream` to `streamChat` as described
 
 ---
 
-## UI Design System
+## UI Overview
 
-The interface uses a dark, minimal aesthetic with a fixed palette.
+**TripAgent** uses a dark, minimal aesthetic with a fixed design token palette for visual consistency across all components.
 
-| Token         | Value       | Usage                              |
-|---------------|-------------|------------------------------------|
-| `T.bg`        | `#0D0F14`   | Page background                    |
-| `T.panel`     | `#13161E`   | Sidebar, navbar                    |
-| `T.surface`   | `#1C2030`   | Chat bubbles, input                |
-| `T.blue`      | `#6383FF`   | Primary accent, user messages      |
-| `T.green`     | `#34D399`   | Completed steps, within-budget     |
-| `T.amber`     | `#FBBF24`   | Itinerary section                  |
-| `T.cyan`      | `#38BDF8`   | Parse and LLM nodes                |
-| `T.red`       | `#F87171`   | Over-budget indicator              |
-| `T.text`      | `#E8EAF0`   | Primary text                       |
-| `T.muted`     | `#6B7280`   | Secondary text, placeholders       |
+### Design Tokens
 
-All tokens live in `tokens.js` and are imported by every component.
+| Token | Value | Usage |
+|-------|-------|-------|
+| `T.bg` | `#0D0F14` | Page background |
+| `T.panel` | `#13161E` | Sidebar, navbar |
+| `T.surface` | `#1C2030` | Chat bubbles, cards |
+| `T.blue` | `#6383FF` | Day tag pills, step numbers, links |
+| `T.green` | `#34D399` | Online status indicator dot |
+| `T.text` | `#E8EAF0` | Primary text, headings |
+| `T.muted` | `#6B7280` | Secondary text, timestamps, placeholders |
+| `T.input` | `#1C2030` | Bottom input bar background |
+
+> All tokens live in `tokens.js` and are imported by every component.
+
+### Key UI Screens
+
+- **Chat Interface** — User inputs a natural language trip request; the agent responds with live backend status indicators (`COMMUNICATING WITH BACKEND`) and structured result cards.
+- **Your Custom Setup Card** — Displays AI-generated itinerary summary including destination, dates, and estimated flight and hotel costs.
+- **Day-by-Day Itinerary** — Expandable day cards showing time-stamped activities, locations, and descriptions for each day of the trip.
 
 ---
 
